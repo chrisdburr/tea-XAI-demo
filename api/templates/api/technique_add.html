@@ -1,0 +1,83 @@
+<!-- api/templates/api/technique_add.html -->
+
+{% extends 'base.html' %}
+{% load static tailwind_tags form_tags %}
+
+{% block title %}Add Technique{% endblock %}
+
+{% block content %}
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Add New Technique</h1>
+        <form method="post" class="bg-white p-8 rounded-lg shadow-md">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="id_technique" class="block text-gray-700 font-semibold mb-2">Technique</label>
+                {{ form.technique|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                {% if form.technique.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.technique.errors }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label for="id_description" class="block text-gray-700 font-semibold mb-2">Description</label>
+                {{ form.description|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                {% if form.description.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.description.errors }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2">Scope</label>
+                <div class="flex items-center">
+                    {{ form.scope_global|add_class:"mr-2" }}
+                    <label for="id_scope_global" class="text-gray-700">Global</label>
+                </div>
+                <div class="flex items-center">
+                    {{ form.scope_local|add_class:"mr-2" }}
+                    <label for="id_scope_local" class="text-gray-700">Local</label>
+                </div>
+                {% if form.scope_global.errors or form.scope_local.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.scope_global.errors|join:", " }} {{ form.scope_local.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label for="id_model_dependency" class="block text-gray-700 font-semibold mb-2">Model Dependency</label>
+                {{ form.model_dependency|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                {% if form.model_dependency.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.model_dependency.errors }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label for="id_example_use_case" class="block text-gray-700 font-semibold mb-2">Example Use-Case</label>
+                {{ form.example_use_case|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                {% if form.example_use_case.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.example_use_case.errors }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label for="id_categories" class="block text-gray-700 font-semibold mb-2">Categories</label>
+                {{ form.categories|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                {% if form.categories.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.categories.errors }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mb-6">
+                <label for="id_tags" class="block text-gray-700 font-semibold mb-2">Tags</label>
+                {{ form.tags|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                {% if form.tags.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.tags.errors }}</p>
+                {% endif %}
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow">
+                    Add Technique
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

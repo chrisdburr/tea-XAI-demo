@@ -29,8 +29,9 @@ except Exception as e:
 def extract_markdown_table(md_text):
     # Match the table by looking for the header row starting with '| **Technique**'
     table_pattern = re.compile(
-    r'(\| \*\*Technique\*\*.*?\|(?:\n\|.*?)*\n)',
-    re.DOTALL)
+        r'(\| \*\*Technique\*\*.*?\|(?:\n\|.*?)*\n)',
+        re.DOTALL
+    )
     match = table_pattern.search(md_text)
     if not match:
         raise ValueError("Markdown table not found in the provided file.")
@@ -53,8 +54,10 @@ if not table:
     print("Error: No table found in the Markdown content.")
     exit(1)
 
-# Convert HTML table to pandas DataFrame
-df = pd.read_html(str(table), flavor='bs4')[0]
+# Convert HTML table to pandas DataFrame using StringIO to handle the HTML string
+html_table = str(table)
+html_io = StringIO(html_table)
+df = pd.read_html(html_io, flavor='bs4')[0]
 
 # Clean column names by stripping whitespace and removing asterisks
 df.columns = [col.strip().replace('**', '') for col in df.columns]
@@ -189,7 +192,12 @@ df_final = df[final_columns]
 # For example, replace NaN with empty strings
 df_final.fillna('', inplace=True)
 
+# Define the output CSV path (same directory as the script)
+output_csv = os.path.join(os.path.dirname(__file__), '../api/management/commands/techniques_data.csv')
+
+# Clean and standardize Sub-Categories
+df_final['Sub-Categories'] = df_final['Sub-Categories'].apply(lambda x: '; '.join(sorted(set([sub.strip().title() for sub in x.split(';') if sub.strip()]))))
+
 # Save the DataFrame to a CSV file
-csv_file = os.path.join(os.path.dirname(__file__), 'techniques_data.csv')
-df_final.to_csv(csv_file, index=False)
-print(f"DataFrame saved to '{csv_file}'.")
+df_final.to_csv(output_csv, index=False)
+print(f"DataFrame saved to '{output_csv}'.")

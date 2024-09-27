@@ -1,0 +1,18 @@
+<!-- api/templates/api/home.html -->
+
+{% extends 'base.html' %}
+{% load static tailwind_tags form_tags %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold mb-4 text-gray-900 dark:text-white">Welcome to AI Techniques</h1>
+            <p class="text-xl mb-8 text-gray-700 dark:text-gray-300">Explore various AI interpretability techniques and enhance your understanding.</p>
+            <a href="{% url 'html_views:techniques_list' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300">
+    View Techniques
+</a>
+        </div>
+    </div>
+{% endblock %}

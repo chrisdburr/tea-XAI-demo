@@ -1,101 +1,3 @@
-# Explainable AI Techniques
-
-![](https://raw.githubusercontent.com/alan-turing-institute/turing-commons/main/docs/assets/images/illustrations/phone-peel-background.png)
-
-> [!Note] About 
-> The following list is a draft of techniques that can help researchers, developers, and practitioners improve the interepretability and explainability of their models. The taxonomy is based on Christoph Molnar's work on interpretable machine learning: https://christophm.github.io/interpretable-ml-book/taxonomy-of-interpretability-methods.html
-
-> [!Warning] Work In Progress
-> The current taxonomy is a work-in-progress. We aim to also provide specific links to software tools, resources and references as a future piece of work, and to integrate this into the Trustworthy and Ethical Assurance platform to help users identify techniques that could help establish rigorous arguments about how a model has been verified and validated for transparecy and explainability requirements.
-> Due to the interdisciplinary nature of explainable AI techniques, some methods will fit into multiple categories or sub-categories. Therefore, while the aim is a set of categories that are mutually exlcusive and jointly exhaustive, this is probably an unrealistic objective.
-> If you have any feedback, please feel free to add comments to this document.
-
-## Descriptions of Categories and Sub-Categories
-
-> [!Note] About 
-> We begin with a description of the categories and sub-categories used in the taxonomy.
-
-### 1. Feature Analysis
-Techniques that analyse the contributions and interactions of input features in a model's predictions. Due to the multifaceted nature of some methods, overlaps with other categories may occur.
-
-#### Sub-Categories
-
-- **Importance and Attribution**: Techniques that assign importance scores to input features by assessing their contribution to the model's outputs. These methods help identify which features are most influential in a model's predictions or outputs.
-- **Interaction Analysis**: Techniques that examine how different features interact with each other within a model. These methods uncover interdependencies between features that might not be apparent when analysing them individually.
-
-### 2. Model Approximation
-
-Methods that create interpretable models to approximate and explain the behaviour of complex models. These techniques generate separate models (e.g. surrogates or emulators) to provide insights without altering the original model.
-
-#### Sub-Categories
-
-- **Local Surrogates**: Simple, interpretable models (e.g., decision trees, linear models) that approximate the behaviour of a complex model in a small neighborhood around a specific instance. They provide insight into why the model made a particular prediction for an individual case.
-- **Global Surrogates**: Simpler models that aim to approximate (or emulate) the overall behaviour of a complex model across the entire dataset. These models provide a broader understanding of how the original model operates.
-
-### 3. Visualisation Techniques
-Methods that create visual representations to aid in understanding model behaviour and data structures. Techniques may overlap with feature analysis or model approximation when visualising feature importance or surrogate models.
-
-#### Sub-Categories
-
-- **Feature Visualisation**: Techniques that create visual representations of how specific features impact a model's predictions, which may include plotting feature attributions or importance scores.
-- **Model-Behaviour Visualisation**: Techniques that visualise the internal workings of models, such as decision boundaries, attention mechanisms, or activation patterns. These methods help in understanding how the model processes input data and arrives at decisions.
-- **Dimensionality Reduction Visualisation**: Techniques that reduce the dimensionality of data or model representations to make them more interpretable, helping to explore the structure of high-dimensional data and the internal workings of models.
-
-### 4. Example-Based Methods
-
-Techniques that use specific instances or data examples to explain model predictions. These methods may overlap with causal analysis or prototype selection.
-
-#### Sub-Categories
-
-- **Prototype and Criticism Methods**: Techniques that identify representative examples (prototypes) that summarise the model’s behaviour, as well as outliers or contrasting cases (criticisms) that highlight where the model might struggle.
-- **Counterfactual Explanations**: Techniques that explain model outputs by generating hypothetical examples where the outcome would be different. Such explanations help identify which changes to an input would be necessary to alter the model’s decision.
-- **Causal Analysis**: Techniques that explore potential cause-and-effect relationships within the data or model. They help in understanding how changes to input variables (or interventions) influence the model's output, providing deeper insights into the model’s reasoning beyond correlation.
-
-### 5. Rule Extraction
-
-Methods that derive human-readable rules or logic from models, often to simplify understanding of complex decision-making processes.
-
-#### Sub-Categories
-
-- **Decision Rules**: Techniques that derive if-then rules from a model's decision-making process. These rules provide a clear, human-readable interpretation of how the model arrives at certain predictions.
-- **Decision Trees**: Methods that represent model decisions in the form of tree structures, making the logic of the model’s decisions easy to follow. Decision trees are intrinsically interpretable models and can also be extracted from more complex models as surrogates.
-
-### 6. Uncertainty and Reliability
-
-Techniques that assess the confidence and reliability of model predictions, ensuring awareness of limitations and potential risks.
-
-#### Sub-Categories
-
-- **Confidence Estimation**: Techniques that estimate a model’s confidence in its outputs, often by quantifying the likelihood of a prediction being correct.
-- **Out-of-Distribution Detection**: Techniques that detect when input data differs significantly from the training data, which might lead to unreliable outputs. These methods help ensure that the model is aware of its own limitations when faced with novel situations.
-- **Uncertainty Quantification**: Techniques that quantify the uncertainty in model outputs, often by incorporating probabilistic approaches.
-
-### 7. Fairness Explanations
-
-Methods that focus on detecting and mitigating biases in models, ensuring ethical considerations are met.
-
-#### Sub-Categories
-
-- **Bias Detection and Mitigation**: Techniques that identify and correct biases in models to promote fairness across different demographic groups.
-- **Fairness Metrics Visualisation**: Visual tools that display metrics related to fairness, helping stakeholders understand and address ethical concerns.
-
-### 8. Model Simplification
-
-Techniques that simplify the original model by reducing its complexity, potentially enhancing computational efficiency, deployment feasibility, and sometimes interpretability. These methods modify the original model directly.
-
-#### Sub-Categories
-
-- **Model Pruning**: Techniques that remove unnecessary parameters from a model to reduce complexity and improve interpretability.
-- **Model Distillation**: Methods where a simpler model is trained to replicate the behaviour of a complex model, resulting in a more interpretable version.
-- **Emulators**: ???
-
----
-
-## Taxonomy of Explainable AI Techniques
-
-> [!Caution] Table Width
-> The table's width may be limited depending on your browser's settings. Please ensure you scroll to the right to reveal the final column (i.e. `Example Use Case`). 
-
 | **Technique**                                           | **Description**                                                                                                                                                        | **Category**                      | **Sub-Category**                                             | **Scope**     | **Model-Dependency**              | **Example Use-Case**                                                                                   |
 | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------------------------------------- | ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | **SHAP (SHapley Additive exPlanations)**                | Assigns importance values to each feature by computing their contribution to individual predictions, based on Shapley values from cooperative game theory.             | Feature Analysis                  | Importance and Attribution                                   | Global/Local  | Model-Agnostic                    | Explaining individual predictions in complex models like neural networks or ensemble models.           |
@@ -118,9 +20,9 @@ Techniques that simplify the original model by reducing its complexity, potentia
 | **Individual Conditional Expectation (ICE) Plots**      | Shows how a feature affects predictions for individual instances, highlighting heterogeneous effects across data points.                                              | Visualisation Techniques          | Feature Visualisation                                        | Local         | Model-Agnostic                    | Visualising how customers' predicted spending changes with income in consumer behaviour models.         |
 | **Saliency Maps**                                       | Highlights important pixels in input images that most influence the output prediction in computer vision models.                                                      | Visualisation Techniques / Feature Analysis | Model Behaviour Visualisation / Importance and Attribution  | Local         | Model-Specific                    | Identifying regions contributing to tumor diagnosis in medical images.                                 |
 | **Grad-CAM (Gradient-weighted Class Activation Mapping)** | Uses gradients to produce heatmaps highlighting image regions that contribute most to the model's output.                                                           | Visualisation Techniques          | Model Behaviour Visualisation                                | Local         | Model-Specific                    | Visualising parts of an image leading to a 'dog' classification in image recognition models.           |
-| **Occlusion Sensitivity**                               | Measures prediction changes by systematically occluding parts of the input to identify important regions or features.                                                | Visualisation Techniques / Feature Analysis | Model Behaviour Visualisation / Importance and Attribution   | Local         | Model-Specific                    | Understanding which words affect sentiment prediction by masking them in NLP models.                   |
+| **Occlusion Sensitivity**                               | Measures prediction changes by systematically occluding parts of the input to identify important regions or features.                                                | Visualisation Techniques / Feature Analysis | Model Behaviour visualisation / Importance and Attribution   | Local         | Model-Specific                    | Understanding which words affect sentiment prediction by masking them in NLP models.                   |
 | **Attention Mechanisms in Neural Networks**             | Visualises attention weights in models like transformers, highlighting important input parts for predictions. Attention weights can also indicate feature importance. | Visualisation Techniques / Feature Analysis | Model Behaviour Visualisation / Importance and Attribution   | Local         | Model-Specific                    | Analysing which words a transformer model focuses on during machine translation tasks.                 |
-| **Factor Analysis**                                     | Reduces dimensionality by identifying latent factors explaining observed variability, aiding in data interpretation beyond visualisation.                            | Model Simplification / Visualisation Techniques | Model Distillation / Dimensionality Reduction Visualisation  | Global        | Model-Agnostic                    | Discovering underlying factors in psychological survey data for social science research.              |
+| **Factor Analysis**                                     | Reduces dimensionality by identifying latent factors explaining observed variability, aiding in data interpretation beyond visualisation.                            | Model Simplification / Visualisation Techniques | Model Distillation / Dimensionality Reduction visualisation  | Global        | Model-Agnostic                    | Discovering underlying factors in psychological survey data for social science research.              |
 | **Principal Component Analysis (PCA)**                  | Reduces dimensionality by projecting data onto directions of maximum variance, simplifying data while retaining important information.                                | Visualisation Techniques          | Dimensionality Reduction Visualisation                       | Global        | Model-Agnostic                    | Visualising high-dimensional gene expression data in bioinformatics.                                   |
 | **t-SNE**                                               | A non-linear technique that visualises high-dimensional data in 2D or 3D, preserving local relationships between points.                                              | Visualisation Techniques          | Dimensionality Reduction Visualisation                       | Global        | Model-Agnostic                    | Visualizing clusters in high-dimensional word embeddings.                                              |
 | **UMAP**                                                | A non-linear technique similar to t-SNE but better at preserving global data structure.                                                                               | Visualisation Techniques          | Dimensionality Reduction Visualisation                       | Global        | Model-Agnostic                    | Visualising patterns in user behaviour data for marketing analysis.                                     |
@@ -134,7 +36,6 @@ Techniques that simplify the original model by reducing its complexity, potentia
 | **ODIN (Out-of-DIstribution detector for Neural networks)** | Detects out-of-distribution samples in neural networks by applying temperature scaling and input perturbations.                                                   | Uncertainty and Reliability       | Out-of-Distribution Detection                                | Global        | Model-Specific                    | Identifying when an image classifier encounters novel inputs.                                          |
 | **Permutation Tests**                                   | Estimates uncertainty by permuting data labels and calculating test statistics to create a null distribution in non-parametric methods.                               | Uncertainty and Reliability       | Uncertainty Quantification                                   | Global        | Model-Agnostic                    | Assessing the significance of model predictions in hypothesis testing.                                 |
 | **Fairness Metrics (e.g., Equalized Odds, Demographic Parity)** | Evaluates models for fairness by measuring disparities in predictions across different demographic groups.                   | Fairness Explanations | Bias Detection and Mitigation                                | Global        | Model-Agnostic                    | Ensuring a hiring model does not discriminate based on gender or ethnicity.                            |
-| **???** | ??? | Fairness Explanations | Fairness Metrics Visualisation                               | ??? | ??? | ??? |
 | **Model Pruning**                                       | Simplifies neural networks by removing less important weights or neurons, reducing complexity while retaining performance.                                            | Model Simplification              | Model Pruning                                                | Global        | Model-Specific                    | Reducing model size for deployment on mobile devices without significant loss in accuracy.             |
 | **Knowledge Distillation**                              | Trains a simpler 'student' model to replicate the behaviour of a complex 'teacher' model, resulting in a more interpretable model.                                    | Model Simplification              | Model Distillation                                           | Global        | Model-Agnostic                    | Simplifying a deep neural network for faster inference in real-time applications.                      |
 | **Attention Visualisation in Transformers**             | Visualises attention weights in transformer-based models to show how the model focuses on different input parts during prediction. Attention weights also indicate feature importance. | Visualisation Techniques / Feature Analysis | Model Behaviour Visualisation / Importance and Attribution   | Local         | Model-Specific                    | Understanding which words a transformer model focuses on during machine translation or summarisation tasks. |

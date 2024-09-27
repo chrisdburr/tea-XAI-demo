@@ -1,8 +1,8 @@
 # api/urls.py
 
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import (
+from rest_framework import routers
+from .views.api_views import (
     CategoriesViewSet,
     SubCategoriesViewSet,
     TagsViewSet,
@@ -12,15 +12,15 @@ from .views import (
     SubTechniquesViewSet,
 )
 
-router = DefaultRouter()
+router = routers.DefaultRouter()
 router.register(r'categories', CategoriesViewSet)
 router.register(r'subcategories', SubCategoriesViewSet)
 router.register(r'tags', TagsViewSet)
 router.register(r'techniques', TechniquesViewSet)
-router.register(r'technique-categories', TechniqueCategoriesViewSet)
-router.register(r'technique-tags', TechniqueTagsViewSet)
+router.register(r'techniquecategories', TechniqueCategoriesViewSet)
+router.register(r'techniquetags', TechniqueTagsViewSet)
 router.register(r'subtechniques', SubTechniquesViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', include(router.urls)),  # API endpoints
 ]
