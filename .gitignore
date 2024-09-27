@@ -4,4 +4,5 @@
 poetry.lock
 *.log
 *.code-workspace
+node_modules/
 
