@@ -3,4 +3,5 @@
 .DS_Store
 poetry.lock
 md_to_db/import_log.log
+*.code-workspace
 
