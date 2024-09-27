@@ -7,7 +7,7 @@ A simple (and work-in-progress) Django app for interacting with a database of XA
 ### Clone repository
 
 ```shell
-git clone && cd TEA-XAI-DEMO
+git clone https://github.com/chrisdburr/tea-XAI-demo.git && cd TEA-XAI-DEMO
 ```
 
 ### Populate `.env` file
@@ -52,7 +52,7 @@ python manage.py runserver
 
 You can then navigate to the API in a browser (or using an app, such as Postman): http://localhost:8000/api/.
 
-## To DO
+## To Do
 
 - [ ] Review DB scheme to ensure integrity and completeness 
 - [ ] Update API endpoints to provide greater interactivity
