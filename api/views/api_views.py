@@ -1,6 +1,7 @@
 # api/views/api_views.py
 
 from rest_framework import viewsets, filters
+from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from ..models import (
     AssuranceGoal,
@@ -47,6 +48,14 @@ class SubCategoriesViewSet(viewsets.ModelViewSet):
     filterset_fields = ['name', 'category']
     search_fields = ['name', 'category__name']
     ordering_fields = ['id', 'name']
+
+def get_categories(request, assurance_goal_id):
+    categories = Category.objects.filter(assurance_goal_id=assurance_goal_id)
+    return JsonResponse({'categories': [{'id': category.id, 'name': category.name} for category in categories]})
+
+def get_subcategories(request, category_id):
+    sub_categories = SubCategory.objects.filter(category_id=category_id)
+    return JsonResponse({'sub_categories': [{'id': sub_category.id, 'name': sub_category.name} for sub_category in sub_categories]})
 
 class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()

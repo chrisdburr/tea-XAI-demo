@@ -1,6 +1,7 @@
 # api/urls.py
 
 from django.urls import path, include
+from .views.api_views import get_categories, get_subcategories
 from rest_framework import routers
 from .views.api_views import (
     AssuranceGoalsViewSet,
@@ -25,4 +26,6 @@ router.register(r'techniquetags', TechniqueTagsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),  # API endpoints
+    path('get_categories/<int:assurance_goal_id>/', get_categories, name='get_categories'),
+    path('get_subcategories/<int:category_id>/', get_subcategories, name='get_subcategories'),
 ]

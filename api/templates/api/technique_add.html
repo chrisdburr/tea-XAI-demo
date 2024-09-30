@@ -1,4 +1,4 @@
-<!-- api/templates/api/technique_add.html -->
+<!-- api/templates/technique_add.html -->
 
 {% extends 'base.html' %}
 {% load static tailwind_tags form_tags %}
@@ -40,7 +40,9 @@
             <!-- Categories -->
             <div class="mb-4">
                 <label for="id_categories" class="block text-gray-700 font-semibold mb-2">Categories</label>
-                {{ form.categories|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                <select name="categories" id="id_categories" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select Category</option>
+                </select>
                 {% if form.categories.errors %}
                     <p class="text-red-500 text-sm mt-1">{{ form.categories.errors }}</p>
                 {% endif %}
@@ -49,7 +51,9 @@
             <!-- Sub-Categories -->
             <div class="mb-4">
                 <label for="id_sub_categories" class="block text-gray-700 font-semibold mb-2">Sub-Categories</label>
-                {{ form.sub_categories|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                <select name="sub_categories" id="id_sub_categories" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select Sub-Category</option>
+                </select>
                 {% if form.sub_categories.errors %}
                     <p class="text-red-500 text-sm mt-1">{{ form.sub_categories.errors }}</p>
                 {% endif %}
@@ -57,11 +61,17 @@
 
             <!-- Model Dependency -->
             <div class="mb-4">
-                <label for="id_model_dependency" class="block text-gray-700 font-semibold mb-2">Model Dependency</label>
-                {{ form.model_dependency|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" }}
-                {% if form.model_dependency.errors %}
-                    <p class="text-red-500 text-sm mt-1">{{ form.model_dependency.errors }}</p>
-                {% endif %}
+                <label class="block text-gray-700 font-semibold mb-2">Model Dependency</label>
+                <div class="flex space-x-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="model_dependency" value="agnostic" class="form-radio text-blue-500" checked>
+                        <span class="ml-2">Agnostic</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="model_dependency" value="specific" class="form-radio text-blue-500">
+                        <span class="ml-2">Specific</span>
+                    </label>
+                </div>
             </div>
 
             <!-- Example Use-Case -->
@@ -82,6 +92,42 @@
                 {% endif %}
             </div>
 
+            <!-- Dynamic Fields Based on Assurance Goal -->
+            <div id="dynamic-fields" class="hidden">
+                <!-- Scope -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Scope</label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="scope" value="local" class="form-checkbox text-blue-500">
+                        <span class="ml-2">Local</span>
+                    </label>
+                    <label class="inline-flex items-center ml-4">
+                        <input type="checkbox" name="scope" value="global" class="form-checkbox text-blue-500">
+                        <span class="ml-2">Global</span>
+                    </label>
+                </div>
+                <!-- Fairness Approach -->
+                <div class="mb-4">
+                    <label for="id_fairness_approach" class="block text-gray-700 font-semibold mb-2">Fairness Approach</label>
+                    <select name="fairness_approach" id="id_fairness_approach" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Fairness Approach</option>
+                        {% for approach in fairness_approaches %}
+                            <option value="{{ approach.id }}">{{ approach.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Project Lifecycle Stage -->
+                <div class="mb-4">
+                    <label for="id_project_lifecycle_stage" class="block text-gray-700 font-semibold mb-2">Project Lifecycle Stage</label>
+                    <select name="project_lifecycle_stage" id="id_project_lifecycle_stage" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Project Lifecycle Stage</option>
+                        {% for stage in project_lifecycle_stages %}
+                            <option value="{{ stage.id }}">{{ stage.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
             <!-- Submit Button -->
             <div class="flex justify-end">
                 <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow">
@@ -90,4 +136,57 @@
             </div>
         </form>
     </div>
+
+    <script>
+        const assuranceGoalField = document.getElementById('id_assurance_goal');
+        const categoryField = document.getElementById('id_categories');
+        const subCategoryField = document.getElementById('id_sub_categories');
+        const dynamicFields = document.getElementById('dynamic-fields');
+
+        assuranceGoalField.addEventListener('change', function() {
+            const selectedGoal = this.value;
+
+            // Fetch categories based on selected assurance goal
+            fetch(`/api/get_categories/${selectedGoal}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear current options
+                    categoryField.innerHTML = '<option value="">Select Category</option>'; // Reset
+                    data.categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.id;
+                        option.textContent = category.name;
+                        categoryField.appendChild(option);
+                    });
+
+                    // Show/hide dynamic fields based on selected goal
+                    if (selectedGoal === 'explainability' || selectedGoal === 'fairness') {
+                        dynamicFields.classList.remove('hidden');
+                    } else {
+                        dynamicFields.classList.add('hidden');
+                    }
+                });
+
+            // Clear sub-category options
+            subCategoryField.innerHTML = '<option value="">Select Sub-Category</option>'; // Reset
+        });
+
+        categoryField.addEventListener('change', function() {
+            const selectedCategory = this.value;
+
+            // Fetch sub-categories based on selected category
+            fetch(`/api/get_subcategories/${selectedCategory}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear current options
+                    subCategoryField.innerHTML = '<option value="">Select Sub-Category</option>'; // Reset
+                    data.sub_categories.forEach(subCategory => {
+                        const option = document.createElement('option');
+                        option.value = subCategory.id;
+                        option.textContent = subCategory.name;
+                        subCategoryField.appendChild(option);
+                    });
+                });
+        });
+    </script>
 {% endblock %}
