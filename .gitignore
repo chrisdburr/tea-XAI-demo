@@ -1,0 +1,9 @@
+.env
+.venv/
+.DS_Store
+__pycache__
+poetry.lock
+*.log
+*.code-workspace
+node_modules/
+**/__pycache__/

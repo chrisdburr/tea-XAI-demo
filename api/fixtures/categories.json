@@ -1,0 +1,137 @@
+[
+	{
+		"model": "api.category",
+		"pk": 1,
+		"fields": {
+			"name": "Feature Analysis",
+			"description": "Techniques that analyse the contributions and interactions of input features in a model's predictions. Due to the multifaceted nature of some methods, overlaps with other categories may occur.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 2,
+		"fields": {
+			"name": "Model Approximation",
+			"description": "Methods that create interpretable models to approximate and explain the behaviour of complex models. These techniques generate separate models (e.g. surrogates or emulators) to provide insights without altering the original model.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 3,
+		"fields": {
+			"name": "Visualisation Techniques",
+			"description": "Methods that create visual representations to aid in understanding model behaviour and data structures. Techniques may overlap with feature analysis or model approximation when visualising feature importance or surrogate models.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 4,
+		"fields": {
+			"name": "Example-Based Methods",
+			"description": "Techniques that use specific instances or data examples to explain model predictions. These methods may overlap with causal analysis or prototype selection.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 5,
+		"fields": {
+			"name": "Rule Extraction",
+			"description": "Methods that derive human-readable rules or logic from models, often to simplify understanding of complex decision-making processes.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 6,
+		"fields": {
+			"name": "Uncertainty and Reliability",
+			"description": "Techniques that assess the confidence and reliability of model predictions, ensuring awareness of limitations and potential risks.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 7,
+		"fields": {
+			"name": "Fairness Explanations",
+			"description": "Methods that focus on detecting and mitigating biases in models, ensuring ethical considerations are met.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 8,
+		"fields": {
+			"name": "Model Simplification",
+			"description": "Techniques that simplify the original model by reducing its complexity, potentially enhancing computational efficiency, deployment feasibility, and sometimes interpretability. These methods modify the original model directly.",
+			"assurance_goal": 1
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 9,
+		"fields": {
+			"name": "Pre-Processing Techniques",
+			"description": "Methods that modify the training data to reduce bias before model training. These techniques aim to ensure that the data fed into the model is as fair and unbiased as possible.",
+			"assurance_goal": 2
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 10,
+		"fields": {
+			"name": "In-Processing Techniques",
+			"description": "Methods that modify the learning algorithm or model training process to reduce bias during model training. These techniques integrate fairness constraints or objectives directly into the model training.",
+			"assurance_goal": 2
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 11,
+		"fields": {
+			"name": "Post-Processing Techniques",
+			"description": "Methods that adjust the model outputs after training to improve fairness. These techniques do not alter the trained model but modify its predictions to satisfy fairness criteria.",
+			"assurance_goal": 2
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 12,
+		"fields": {
+			"name": "Fairness Metrics and Evaluation",
+			"description": "Techniques focused on measuring and evaluating fairness in models. These methods help in detecting biases and assessing the effectiveness of mitigation strategies.",
+			"assurance_goal": 2
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 13,
+		"fields": {
+			"name": "Causal Fairness Methods",
+			"description": "Techniques that use causal inference to understand and mitigate biases, considering the causal relationships between variables.",
+			"assurance_goal": 2
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 14,
+		"fields": {
+			"name": "Interpretability and Explainability",
+			"description": "Techniques that enhance the transparency of models by providing explanations for their predictions, which can help identify and mitigate biases.",
+			"assurance_goal": 2
+		}
+	},
+	{
+		"model": "api.category",
+		"pk": 15,
+		"fields": {
+			"name": "Causal Methods",
+			"description": "Techniques that employ causal inference to understand and mitigate biases, considering causal relationships between variables.",
+			"assurance_goal": 2
+		}
+	}
+]
