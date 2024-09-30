@@ -1,5 +1,4 @@
 <!-- api/templates/api/techniques_list.html -->
-
 {% extends 'base.html' %}
 {% load static tailwind_tags form_tags %}
 
@@ -7,19 +6,45 @@
 
 {% block content %}
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">AI Assurance Techniques</h1>
+        <h1 class="text-3xl font-bold">Assurance Techniques</h1>
         <a href="{% url 'html_views:technique_add' %}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">
             Add New Technique
         </a>
     </div>
+
+    <!-- Filtering Form -->
+    <form method="GET" class="mb-4">
+        <label for="category" class="mr-2">Filter by Category:</label>
+        <select name="category" id="category" class="border p-2 rounded">
+            <option value="">All</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id|stringformat:"d" == selected_category %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="assurance_goal" class="mr-2">Filter by Assurance Goal:</label>
+        <select name="assurance_goal" id="assurance_goal" class="border p-2 rounded">
+            <option value="">All</option>
+            {% for assurance_goal in assurance_goals %}
+                <option value="{{ assurance_goal.id }}" {% if assurance_goal.id|stringformat:"d" == selected_assurance_goal %}selected{% endif %}>
+                    {{ assurance_goal.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Filter</button>
+    </form>
+
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white rounded-lg overflow-hidden">
             <thead class="bg-gray-200">
                 <tr>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Technique</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Assurance Goal</th>
-                    <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Categories</th>
-                    <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Sub-Categories</th>
+                    <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Category</th>
+                    <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Sub-Category</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Description</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Model Dependency</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Example Use-Case</th>
@@ -30,7 +55,11 @@
                 {% for technique in techniques %}
                 <tr class="border-b hover:bg-gray-100">
                     <!-- Technique Name -->
-                    <td class="py-4 px-6">{{ technique.name }}</td>
+                    <td class="py-4 px-6">
+                        <a href="{% url 'html_views:technique_detail' technique.id %}" class="text-blue-500 hover:underline">
+                            {{ technique.name }}
+                        </a>
+                    </td>
 
                     <!-- Assurance Goal -->
                     <td class="py-4 px-6">
@@ -45,7 +74,7 @@
                     <td class="py-4 px-6">
                         {% if technique.categories.all %}
                             {% for category in technique.categories.all %}
-                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ category.name }}</span>
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-2 rounded-full mr-1 mb-1">{{ category.name }}</span>
                             {% endfor %}
                         {% else %}
                             <span class="text-gray-500 text-sm">N/A</span>
@@ -56,7 +85,7 @@
                     <td class="py-4 px-6">
                         {% if technique.sub_categories.all %}
                             {% for sub_cat in technique.sub_categories.all %}
-                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ sub_cat.name }}</span>
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-3 py-2 rounded-full mr-1 mb-1">{{ sub_cat.name }}</span>
                             {% endfor %}
                         {% else %}
                             <span class="text-gray-500 text-sm">N/A</span>
@@ -69,7 +98,7 @@
                     <!-- Model Dependency -->
                     <td class="py-4 px-6">
                         {% if technique.model_dependency %}
-                            <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">{{ technique.model_dependency }}</span>
+                            <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-3 py-2 rounded-full">{{ technique.model_dependency }}</span>
                         {% else %}
                             <span class="text-gray-500 text-sm">N/A</span>
                         {% endif %}
@@ -82,7 +111,7 @@
                     <td class="py-4 px-6">
                         {% if technique.tags.all %}
                             {% for tag in technique.tags.all %}
-                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ tag.name }}</span>
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-3 py-2 rounded-full mr-1 mb-1">{{ tag.name }}</span>
                             {% endfor %}
                         {% else %}
                             <span class="text-gray-500 text-sm">No Tags</span>
@@ -94,7 +123,7 @@
         </table>
     </div>
 
-    <!-- Pagination Controls (if implemented) -->
+    <!-- Pagination Controls -->
     {% if techniques.has_other_pages %}
     <div class="flex justify-center mt-6">
         <nav class="flex items-center space-x-2">

@@ -1,0 +1,23 @@
+<!-- api/templates/api/technique_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Technique Detail{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl font-bold text-gray-600 mb-4">{{ technique.name }}</h1>
+        <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+            <p class="text-lg"><strong class="font-semibold">Description:</strong> {{ technique.description }}</p>
+            <p class="text-lg mt-2"><strong class="font-semibold">Assurance Goal:</strong> {{ technique.assurance_goal.name }}</p>
+            <p class="text-lg mt-2"><strong class="font-semibold">Category:</strong> {% if technique.categories.all %}{% for category in technique.categories.all %}{{ category.name }}{% endfor %}{% else %}N/A{% endif %}</p>
+            <p class="text-lg mt-2"><strong class="font-semibold">Sub-Category:</strong> {% if technique.sub_categories.all %}{% for sub_category in technique.sub_categories.all %}{{ sub_category.name }}{% endfor %}{% else %}N/A{% endif %}</p>
+            <p class="text-lg mt-2"><strong class="font-semibold">Model Dependency:</strong> {{ technique.model_dependency }}</p>
+            <p class="text-lg mt-2"><strong class="font-semibold">Example Use Case:</strong> {{ technique.example_use_case }}</p>
+            
+        </div>
+        <div class="mt-6">
+            <a href="{% url 'html_views:techniques_list' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Back to List</a>
+        </div>
+    </div>
+{% endblock %}
