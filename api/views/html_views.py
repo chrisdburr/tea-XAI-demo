@@ -1,12 +1,17 @@
 # api/views/html_views.py
 
 from django.shortcuts import render, redirect
-from ..models import Techniques
-from ..forms import TechniqueForm 
+from ..models import Technique
+from ..forms import TechniqueForm
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 def techniques_list(request):
-    techniques = Techniques.objects.all()
+    technique_list = Technique.objects.all()
+    paginator = Paginator(technique_list, 10)  # Show 10 techniques per page
+
+    page_number = request.GET.get('page')
+    techniques = paginator.get_page(page_number)
     return render(request, 'api/techniques_list.html', {'techniques': techniques})
 
 def technique_add(request):

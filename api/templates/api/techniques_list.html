@@ -7,8 +7,8 @@
 
 {% block content %}
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">AI Interpretability Techniques</h1>
-        <a href="{% url 'html_views:technique_add' %}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Add New Technique</a>
+        <h1 class="text-3xl font-bold">AI Assurance Techniques</h1>
+        <a href="{% url 'html_views:technique_add' %}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">
             Add New Technique
         </a>
     </div>
@@ -17,9 +17,10 @@
             <thead class="bg-gray-200">
                 <tr>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Technique</th>
-                    <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Description</th>
+                    <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Assurance Goal</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Categories</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Sub-Categories</th>
+                    <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Description</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Model Dependency</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Example Use-Case</th>
                     <th class="py-3 px-6 text-left text-sm font-semibold text-gray-700">Tags</th>
@@ -28,22 +29,44 @@
             <tbody>
                 {% for technique in techniques %}
                 <tr class="border-b hover:bg-gray-100">
-                    <td class="py-4 px-6">{{ technique.technique }}</td>
+                    <!-- Technique Name -->
+                    <td class="py-4 px-6">{{ technique.name }}</td>
+
+                    <!-- Assurance Goal -->
+                    <td class="py-4 px-6">
+                        {% if technique.assurance_goal %}
+                            {{ technique.assurance_goal.name }}
+                        {% else %}
+                            <span class="text-gray-500 text-sm">N/A</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Categories -->
+                    <td class="py-4 px-6">
+                        {% if technique.categories.all %}
+                            {% for category in technique.categories.all %}
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ category.name }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="text-gray-500 text-sm">N/A</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Sub-Categories -->
+                    <td class="py-4 px-6">
+                        {% if technique.sub_categories.all %}
+                            {% for sub_cat in technique.sub_categories.all %}
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ sub_cat.name }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="text-gray-500 text-sm">N/A</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Description -->
                     <td class="py-4 px-6">{{ technique.description }}</td>
-                    <td class="py-4 px-6">
-                        {% for category in technique.categories.all %}
-                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ category.name }}</span>
-                        {% empty %}
-                            <span class="text-gray-500 text-sm">No Categories</span>
-                        {% endfor %}
-                    </td>
-                    <td class="py-4 px-6">
-                        {% for sub in technique.subtechniques_set.all %}
-                            <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ sub.sub_category.name }}</span>
-                        {% empty %}
-                            <span class="text-gray-500 text-sm">No Sub-Categories</span>
-                        {% endfor %}
-                    </td>
+
+                    <!-- Model Dependency -->
                     <td class="py-4 px-6">
                         {% if technique.model_dependency %}
                             <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">{{ technique.model_dependency }}</span>
@@ -51,13 +74,19 @@
                             <span class="text-gray-500 text-sm">N/A</span>
                         {% endif %}
                     </td>
+
+                    <!-- Example Use-Case -->
                     <td class="py-4 px-6">{{ technique.example_use_case }}</td>
+
+                    <!-- Tags -->
                     <td class="py-4 px-6">
-                        {% for tag in technique.tags.all %}
-                            <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ tag.name }}</span>
-                        {% empty %}
+                        {% if technique.tags.all %}
+                            {% for tag in technique.tags.all %}
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{{ tag.name }}</span>
+                            {% endfor %}
+                        {% else %}
                             <span class="text-gray-500 text-sm">No Tags</span>
-                        {% endfor %}
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

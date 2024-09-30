@@ -1,22 +1,24 @@
 # api/forms.py
 
 from django import forms
-from .models import Techniques
+from .models import Technique
 
 class TechniqueForm(forms.ModelForm):
     class Meta:
-        model = Techniques
+        model = Technique
         fields = [
-            'technique',
+            'name',
             'description',
-            'scope_global',
-            'scope_local',
+            'assurance_goal',
             'model_dependency',
             'example_use_case',
+            'scope',
             'categories',
+            'sub_categories',
             'tags',
         ]
         widgets = {
             'categories': forms.CheckboxSelectMultiple(),
+            'sub_categories': forms.CheckboxSelectMultiple(),
             'tags': forms.CheckboxSelectMultiple(),
         }

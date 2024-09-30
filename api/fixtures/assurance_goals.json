@@ -1,0 +1,18 @@
+[
+	{
+		"model": "api.assurancegoal",
+		"pk": 1,
+		"fields": {
+			"name": "Explainability",
+			"description": "Ensuring model decisions are transparent and understandable."
+		}
+	},
+	{
+		"model": "api.assurancegoal",
+		"pk": 2,
+		"fields": {
+			"name": "Fairness",
+			"description": "Promoting equitable outcomes across different user groups."
+		}
+	}
+]

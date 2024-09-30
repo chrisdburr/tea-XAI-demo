@@ -47,6 +47,7 @@ Once the virtual environment, packages, container, and database are created/runn
 ```shell
 python manage.py makemigrations
 python manage.py migrate
+python manage.py loaddata api/fixtures/assurance_goals.json
 python manage.py runserver
 ```
 
@@ -58,3 +59,17 @@ You can then navigate to the API in a browser (or using an app, such as Postman)
 - [ ] Update API endpoints to provide greater interactivity
 - [ ] Build views and HTML templates for better navigation
 - [ ] Integrate into TEA platform
+- [ ] Add additional commands for importing data
+
+### Additional Commands
+
+**1. Convert MD to CSV**
+
+...
+
+**2. Create Fixtures**
+
+```python
+python manage.py loaddata api/fixtures/assurance_goals.json
+```
+

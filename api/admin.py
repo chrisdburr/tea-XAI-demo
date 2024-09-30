@@ -1,21 +1,32 @@
 from django.contrib import admin
-
-# Register your models here.
-
 from .models import (
-    Techniques,
-    Categories,
-    SubCategories,
-    Tags,
-    TechniqueCategories,
-    TechniqueTags,
-    SubTechniques
+    AssuranceGoal,
+    Category,
+    SubCategory,
+    Technique,
+    Tag,
+    Property,
+    TechniqueProperty,
+    TechniqueTag,
+    TechniqueCategory,
+    TechniqueSubCategory,
+    FairnessApproach,
+    ProjectLifecycleStage,
+    TechniqueFairnessApproach,
+    TechniqueProjectLifecycleStage,
 )
 
-admin.site.register(Techniques)
-admin.site.register(Categories)
-admin.site.register(SubCategories)
-admin.site.register(Tags)
-admin.site.register(TechniqueCategories)
-admin.site.register(TechniqueTags)
-admin.site.register(SubTechniques)
+admin.site.register(Technique)
+admin.site.register(AssuranceGoal)
+admin.site.register(Category)
+admin.site.register(SubCategory)
+admin.site.register(Tag)
+admin.site.register(Property)
+admin.site.register(TechniqueProperty)
+admin.site.register(TechniqueTag)
+admin.site.register(TechniqueCategory)
+admin.site.register(TechniqueSubCategory)
+admin.site.register(FairnessApproach)
+admin.site.register(ProjectLifecycleStage)
+admin.site.register(TechniqueFairnessApproach)
+admin.site.register(TechniqueProjectLifecycleStage)

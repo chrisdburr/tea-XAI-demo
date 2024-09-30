@@ -3,82 +3,94 @@
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from ..models import (
-    Categories,
-    SubCategories,
-    Tags,
-    Techniques,
-    TechniqueCategories,
-    TechniqueTags,
-    SubTechniques,
+    AssuranceGoal,
+    Category,
+    SubCategory,
+    Tag,
+    Technique,
+    Property,
+    TechniqueProperty,
+    TechniqueTag,
 )
 from ..serializers import (
-    CategoriesSerializer,
-    SubCategoriesSerializer,
-    TagsSerializer,
-    TechniquesSerializer,
-    TechniqueCategoriesSerializer,
-    TechniqueTagsSerializer,
-    SubTechniquesSerializer,
+    AssuranceGoalSerializer,
+    CategorySerializer,
+    SubCategorySerializer,
+    TagSerializer,
+    TechniqueSerializer,
+    PropertySerializer,
+    TechniquePropertySerializer,
+    TechniqueTagSerializer,
 )
 
-class CategoriesViewSet(viewsets.ModelViewSet):
-    queryset = Categories.objects.all()
-    serializer_class = CategoriesSerializer
+# New ViewSet for AssuranceGoal
+class AssuranceGoalsViewSet(viewsets.ModelViewSet):
+    queryset = AssuranceGoal.objects.all()
+    serializer_class = AssuranceGoalSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['name']
-    search_fields = ['name']
+    search_fields = ['name', 'description']
     ordering_fields = ['id', 'name']
 
+class CategoriesViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['name', 'assurance_goal']
+    search_fields = ['name', 'assurance_goal__name']
+    ordering_fields = ['id', 'name']
 
 class SubCategoriesViewSet(viewsets.ModelViewSet):
-    queryset = SubCategories.objects.all()
-    serializer_class = SubCategoriesSerializer
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['name']
-    search_fields = ['name']
+    filterset_fields = ['name', 'category']
+    search_fields = ['name', 'category__name']
     ordering_fields = ['id', 'name']
-
 
 class TagsViewSet(viewsets.ModelViewSet):
-    queryset = Tags.objects.all()
-    serializer_class = TagsSerializer
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['name']
     search_fields = ['name']
     ordering_fields = ['id', 'name']
 
-
 class TechniquesViewSet(viewsets.ModelViewSet):
-    queryset = Techniques.objects.all()
-    serializer_class = TechniquesSerializer
+    queryset = Technique.objects.all()
+    serializer_class = TechniqueSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['technique', 'scope_global', 'scope_local']
-    search_fields = ['technique', 'description', 'example_use_case']
-    ordering_fields = ['id', 'technique']
+    filterset_fields = [
+        'name',
+        'assurance_goal',
+        'categories',
+        'sub_categories',
+        'model_dependency',
+        'scope', 
+    ]
+    search_fields = ['name', 'description', 'example_use_case']
+    ordering_fields = ['id', 'name']
 
-
-class TechniqueCategoriesViewSet(viewsets.ModelViewSet):
-    queryset = TechniqueCategories.objects.all()
-    serializer_class = TechniqueCategoriesSerializer
+class PropertiesViewSet(viewsets.ModelViewSet):
+    queryset = Property.objects.all()
+    serializer_class = PropertySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['technique', 'category']
-    search_fields = ['technique__technique', 'category__name']
-    ordering_fields = ['technique', 'category']
+    filterset_fields = ['name', 'assurance_goal']
+    search_fields = ['name', 'assurance_goal__name']
+    ordering_fields = ['id', 'name']
 
+class TechniquePropertiesViewSet(viewsets.ModelViewSet):
+    queryset = TechniqueProperty.objects.all()
+    serializer_class = TechniquePropertySerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['technique', 'property', 'value']
+    search_fields = ['technique__name', 'property__name', 'value']
+    ordering_fields = ['technique', 'property']
 
 class TechniqueTagsViewSet(viewsets.ModelViewSet):
-    queryset = TechniqueTags.objects.all()
-    serializer_class = TechniqueTagsSerializer
+    queryset = TechniqueTag.objects.all()
+    serializer_class = TechniqueTagSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['technique', 'tag']
-    search_fields = ['technique__technique', 'tag__name']
+    search_fields = ['technique__name', 'tag__name']
     ordering_fields = ['technique', 'tag']
-
-
-class SubTechniquesViewSet(viewsets.ModelViewSet):
-    queryset = SubTechniques.objects.all()
-    serializer_class = SubTechniquesSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['technique', 'sub_category']
-    search_fields = ['technique__technique', 'sub_category__name']
-    ordering_fields = ['technique', 'sub_category']
