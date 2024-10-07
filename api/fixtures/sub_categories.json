@@ -42,7 +42,7 @@
 	{
 		"model": "api.subcategory",
 		"fields": {
-			"name": "Model-Behaviour Visualisation",
+			"name": "Model Behaviour Visualisation",
 			"description": "Techniques that visualise the internal workings of models, such as decision boundaries, attention mechanisms, or activation patterns. These methods help in understanding how the model processes input data and arrives at decisions.",
 			"category": 3
 		}
@@ -164,7 +164,7 @@
 		"fields": {
 			"name": "Fair Representation Learning",
 			"description": "Methods that learn new data representations less sensitive to protected attributes while retaining relevant information for the prediction task.",
-			"category": 9
+			"category": 10
 		}
 	},
 	{
@@ -245,14 +245,6 @@
 			"name": "Dimensionality Reduction",
 			"description": "Techniques that reduce the number of features or variables in the data to simplify models and improve interpretability.",
 			"category": 8 
-		}
-	},
-    {
-		"model": "api.subcategory",
-		"fields": {
-			"name": "Model Behaviour Visualisation",
-			"description": "Techniques that visualise the internal workings of models, such as decision boundaries, attention mechanisms, or activation patterns. These methods help in understanding how the model processes input data and arrives at decisions.",
-			"category": 3
 		}
 	}
 ]
