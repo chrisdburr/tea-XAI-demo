@@ -15,12 +15,9 @@ class AssuranceGoal(models.Model):
         return self.name
 
     def clean(self):
+        super().clean()
         if AssuranceGoal.objects.filter(name__iexact=self.name).exclude(id=self.id).exists():
-            raise ValidationError({'name': 'Assurance Goal with this name already exists.'})
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
+            raise ValidationError({'name': 'AssuranceGoal with this name already exists.'})
 
     def natural_key(self):
         return (self.name,)
@@ -42,12 +39,9 @@ class Category(models.Model):
         return self.name
 
     def clean(self):
+        super().clean()
         if Category.objects.filter(name__iexact=self.name).exclude(id=self.id).exists():
             raise ValidationError({'name': 'Category with this name already exists.'})
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
     
     def natural_key(self):
         return (self.name,)
@@ -69,12 +63,9 @@ class SubCategory(models.Model):
         return self.name
 
     def clean(self):
+        super().clean()
         if SubCategory.objects.filter(name__iexact=self.name).exclude(id=self.id).exists():
             raise ValidationError({'name': 'SubCategory with this name already exists.'})
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
 
     def natural_key(self):
         return (self.name, self.category.name)
@@ -85,6 +76,38 @@ class SubCategory(models.Model):
     def get_by_natural_key(cls, name, category_name):
         category = Category.objects.get_by_natural_key(category_name)
         return cls.objects.get(name=name, category=category)
+    
+class FairnessApproach(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+
+    class Meta:
+        db_table = 'fairness_approach'
+        verbose_name_plural = "Fairness Approaches"
+
+    def __str__(self):
+        return self.name
+    
+    def clean(self):
+        super().clean()
+        if FairnessApproach.objects.filter(name__iexact=self.name).exclude(id=self.id).exists():
+            raise ValidationError({'name': 'FairnessApproach with this name already exists.'})
+
+class ProjectLifecycleStage(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+
+    class Meta:
+        db_table = 'project_lifecycle_stage'
+        verbose_name_plural = "Project Lifecycle Stages"
+
+    def __str__(self):
+        return self.name
+    
+    def clean(self):
+        super().clean()
+        if ProjectLifecycleStage.objects.filter(name__iexact=self.name).exclude(id=self.id).exists():
+            raise ValidationError({'name': 'ProjectLifecycleStage with this name already exists.'})
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -97,25 +120,9 @@ class Tag(models.Model):
         return self.name
 
     def clean(self):
+        super().clean()
         if Tag.objects.filter(name__iexact=self.name).exclude(id=self.id).exists():
             raise ValidationError({'name': 'Tag with this name already exists.'})
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
-
-class Property(models.Model):
-    name = models.CharField(max_length=255)
-    assurance_goal = models.ForeignKey(
-        AssuranceGoal, on_delete=models.CASCADE, null=True, blank=True
-    )
-
-    class Meta:
-        db_table = 'property'
-        verbose_name_plural = "Properties"
-
-    def __str__(self):
-        return self.name
 
 class Technique(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -124,9 +131,14 @@ class Technique(models.Model):
     model_dependency = models.CharField(max_length=255)
     example_use_case = models.TextField()
     scope = models.CharField(max_length=255, blank=True, null=True)  # Applicable only to explainability techniques
-    categories = models.ManyToManyField(Category, through='TechniqueCategory', blank=True)
-    sub_categories = models.ManyToManyField(SubCategory, through='TechniqueSubCategory', blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE) 
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ManyToManyField(Tag, through='TechniqueTag', blank=True)
+    reference = models.URLField(blank=True)
+    software_package = models.URLField(blank=True)
+    limitation = models.TextField(blank=True)
+    fairness_approach = models.ManyToManyField(FairnessApproach, through='TechniqueFairnessApproach', blank=True)  # Applicable only to fairness techniques
+    project_lifecycle_stage = models.ManyToManyField(ProjectLifecycleStage, through='TechniqueProjectLifecycleStage', blank=True) # Applicable only to fairness techniques
 
     class Meta:
         db_table = 'technique'
@@ -140,33 +152,23 @@ class Technique(models.Model):
     def __str__(self):
         return self.name
 
-class TechniqueCategory(models.Model):
-    technique = models.ForeignKey(Technique, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+# class TechniqueCategory(models.Model):
+#     technique = models.ForeignKey(Technique, on_delete=models.CASCADE)
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = 'technique_category'
-        unique_together = ('technique', 'category')
-        verbose_name_plural = "Technique Categories"
+#     class Meta:
+#         db_table = 'technique_category'
+#         unique_together = ('technique', 'category')
+#         verbose_name_plural = "Technique Categories"
 
-class TechniqueSubCategory(models.Model):
-    technique = models.ForeignKey(Technique, on_delete=models.CASCADE)
-    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+# class TechniqueSubCategory(models.Model):
+#     technique = models.ForeignKey(Technique, on_delete=models.CASCADE)
+#     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = 'technique_sub_category'
-        unique_together = ('technique', 'sub_category')
-        verbose_name_plural = "Technique Sub-Categories"
-
-class TechniqueProperty(models.Model):
-    technique = models.ForeignKey(Technique, on_delete=models.CASCADE)
-    property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    value = models.CharField(max_length=255)
-
-    class Meta:
-        db_table = 'technique_property'
-        verbose_name_plural = "Technique Properties"
-        unique_together = ('technique', 'property')
+#     class Meta:
+#         db_table = 'technique_sub_category'
+#         unique_together = ('technique', 'sub_category')
+#         verbose_name_plural = "Technique Sub-Categories"
 
 class TechniqueTag(models.Model):
     technique = models.ForeignKey(Technique, on_delete=models.CASCADE)
@@ -179,26 +181,6 @@ class TechniqueTag(models.Model):
 
     def __str__(self):
         return f"{self.technique.name} - {self.tag.name}"
-
-class FairnessApproach(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-
-    class Meta:
-        db_table = 'fairness_approach'
-        verbose_name_plural = "Fairness Approaches"
-
-    def __str__(self):
-        return self.name
-
-class ProjectLifecycleStage(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-
-    class Meta:
-        db_table = 'project_lifecycle_stage'
-        verbose_name_plural = "Project Lifecycle Stages"
-
-    def __str__(self):
-        return self.name
 
 class TechniqueFairnessApproach(models.Model):
     technique = models.ForeignKey(Technique, on_delete=models.CASCADE)
@@ -221,3 +203,10 @@ class TechniqueProjectLifecycleStage(models.Model):
 
     def __str__(self):
         return f"{self.technique.name} - {self.project_lifecycle_stage.name}"
+    
+class TechniqueRelationship(models.Model):
+    technique_from = models.ForeignKey(Technique, related_name='related_from', on_delete=models.DO_NOTHING, null=True, blank=True)
+    technique_to = models.ForeignKey(Technique, related_name='related_to', on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    class Meta:
+        db_table = 'technique_relationship'

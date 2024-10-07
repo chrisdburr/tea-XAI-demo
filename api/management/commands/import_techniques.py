@@ -25,6 +25,22 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
+def get_or_create_case_insensitive(model, name_field, name, defaults=None):
+    """
+    Performs a case-insensitive get or create for a given model and field.
+    """
+    if defaults is None:
+        defaults = {}
+    lookup = {f"{name_field}__iexact": name.strip()}
+    obj = model.objects.filter(**lookup).first()
+    if obj:
+        return obj, False
+    else:
+        # Combine the name field and any extra fields required for creation
+        create_kwargs = {name_field: name.strip(), **defaults}
+        obj = model.objects.create(**create_kwargs)
+        return obj, True
+
 class Command(BaseCommand):
     help = 'Import techniques from a CSV file. Usage: import_techniques <csv_file> <assurance_goal>'
 
@@ -134,6 +150,9 @@ class Command(BaseCommand):
                                 # Update the Technique's fields
                                 for field, value in technique_defaults.items():
                                     setattr(technique, field, value)
+                                # Assign ForeignKey fields directly
+                                technique.category = category
+                                technique.sub_category = sub_category
                                 technique.save()
                                 created = False
                                 success_count += 1
@@ -142,19 +161,17 @@ class Command(BaseCommand):
                                 logger.info(success_msg)
                             except Technique.DoesNotExist:
                                 # Create a new Technique
-                                technique = Technique.objects.create(name=technique_name, **technique_defaults)
+                                technique = Technique.objects.create(
+                                    name=technique_name,
+                                    category=category,  # Assign ForeignKey directly
+                                    sub_category=sub_category,  # Assign ForeignKey directly or leave blank
+                                    **technique_defaults
+                                )
                                 created = True
                                 success_count += 1
                                 success_msg = f"Imported Technique: {technique.name}"
                                 self.stdout.write(self.style.SUCCESS(success_msg))
                                 logger.info(success_msg)
-
-                            # Associate Category and SubCategory
-                            technique.categories.set([category])
-                            if sub_category:
-                                technique.sub_categories.set([sub_category])
-                            else:
-                                technique.sub_categories.clear()
 
                             # Process Tags (assuming there's a 'Tags' column in the CSV)
                             tags = self.parse_semicolon_separated(row.get('Tags', ''))
@@ -203,19 +220,3 @@ class Command(BaseCommand):
         Helper method to parse semicolon-separated strings into a list.
         """
         return [item.strip() for item in value.split(';') if item.strip()]
-
-def get_or_create_case_insensitive(model, name_field, name, defaults=None):
-    """
-    Performs a case-insensitive get or create for a given model and field.
-    """
-    if defaults is None:
-        defaults = {}
-    lookup = {f"{name_field}__iexact": name.strip()}
-    obj = model.objects.filter(**lookup).first()
-    if obj:
-        return obj, False
-    else:
-        # Combine the name field and any extra fields required for creation
-        create_kwargs = {name_field: name.strip(), **defaults}
-        obj = model.objects.create(**create_kwargs)
-        return obj, True
