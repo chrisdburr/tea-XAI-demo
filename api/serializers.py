@@ -5,13 +5,10 @@ from .models import (
     AssuranceGoal,
     Category,
     SubCategory,
-    Tag,
-    Technique,
-    Property,
-    TechniqueProperty,
-    TechniqueTag,
     FairnessApproach,
     ProjectLifecycleStage,
+    Tag,
+    Technique,
 )
 
 class AssuranceGoalSerializer(serializers.ModelSerializer):
@@ -22,31 +19,16 @@ class AssuranceGoalSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'assurance_goal']
+        fields = ['__all__']
 
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
-        fields = ['id', 'name', 'description', 'category']
+        fields = ['__all__']
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = '__all__'
-
-class PropertySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Property
-        fields = '__all__'
-
-class TechniquePropertySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TechniqueProperty
-        fields = '__all__'
-
-class TechniqueTagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TechniqueTag
         fields = '__all__'
 
 class FairnessApproachSerializer(serializers.ModelSerializer):
@@ -62,17 +44,11 @@ class ProjectLifecycleStageSerializer(serializers.ModelSerializer):
 class TechniqueSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     assurance_goal = AssuranceGoalSerializer(read_only=True)
-    categories = CategorySerializer(many=True, read_only=True)
-    sub_categories = SubCategorySerializer(many=True, read_only=True)
-    fairness_approaches = serializers.SerializerMethodField()
-    project_lifecycle_stages = serializers.SerializerMethodField()
+    category = CategorySerializer(read_only=True)
+    sub_category = SubCategorySerializer(read_only=True)
+    fairness_approaches = FairnessApproachSerializer(read_only=True)
+    project_lifecycle_stages = ProjectLifecycleStageSerializer(read_only=True)
 
     class Meta:
         model = Technique
         fields = '__all__'
-
-    def get_fairness_approaches(self, obj):
-        return [fa.fairness_approach.name for fa in obj.techniquefairnessapproach_set.all()]
-
-    def get_project_lifecycle_stages(self, obj):
-        return [pls.project_lifecycle_stage.name for pls in obj.techniqueprojectlifecyclestage_set.all()]

@@ -7,24 +7,21 @@ from ..models import (
     AssuranceGoal,
     Category,
     SubCategory,
+    FairnessApproach,
+    ProjectLifecycleStage,
     Tag,
     Technique,
-    Property,
-    TechniqueProperty,
-    TechniqueTag,
 )
 from ..serializers import (
     AssuranceGoalSerializer,
     CategorySerializer,
     SubCategorySerializer,
+    FairnessApproachSerializer,
+    ProjectLifecycleStageSerializer,
     TagSerializer,
     TechniqueSerializer,
-    PropertySerializer,
-    TechniquePropertySerializer,
-    TechniqueTagSerializer,
 )
 
-# New ViewSet for AssuranceGoal
 class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     queryset = AssuranceGoal.objects.all()
     serializer_class = AssuranceGoalSerializer
@@ -33,7 +30,7 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description']
     ordering_fields = ['id', 'name']
 
-class CategoriesViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -41,7 +38,7 @@ class CategoriesViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'assurance_goal__name']
     ordering_fields = ['id', 'name']
 
-class SubCategoriesViewSet(viewsets.ModelViewSet):
+class SubCategoryViewSet(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -49,13 +46,29 @@ class SubCategoriesViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'category__name']
     ordering_fields = ['id', 'name']
 
-def get_categories(request, assurance_goal_id):
-    categories = Category.objects.filter(assurance_goal_id=assurance_goal_id)
-    return JsonResponse({'categories': [{'id': category.id, 'name': category.name} for category in categories]})
+def get_categorylist(request, assurance_goal_id):
+    categorylist = Category.objects.filter(assurance_goal_id=assurance_goal_id)
+    return JsonResponse({'categorylist': [{'id': category.id, 'name': category.name} for category in categorylist]})
 
-def get_subcategories(request, category_id):
-    sub_categories = SubCategory.objects.filter(category_id=category_id)
-    return JsonResponse({'sub_categories': [{'id': sub_category.id, 'name': sub_category.name} for sub_category in sub_categories]})
+def get_subcategorylist(request, category_id):
+    sub_categorylist = SubCategory.objects.filter(category_id=category_id)
+    return JsonResponse({'sub_categorylist': [{'id': sub_category.id, 'name': sub_category.name} for sub_category in sub_categorylist]})
+
+class FairnessApproachesViewSet(viewsets.ModelViewSet):
+    queryset = FairnessApproach.objects.all()
+    serializer_class = FairnessApproachSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['name']
+    search_fields = ['name']
+    ordering_fields = ['id', 'name']
+
+class ProjectLifecycleStagesViewSet(viewsets.ModelViewSet):
+    queryset = ProjectLifecycleStage.objects.all()
+    serializer_class = ProjectLifecycleStageSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['name']
+    search_fields = ['name']
+    ordering_fields = ['id', 'name']
 
 class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
@@ -72,34 +85,10 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         'name',
         'assurance_goal',
-        'categories',
-        'sub_categories',
+        'category',
+        'sub_category',
         'model_dependency',
         'scope', 
     ]
     search_fields = ['name', 'description', 'example_use_case']
     ordering_fields = ['id', 'name']
-
-class PropertiesViewSet(viewsets.ModelViewSet):
-    queryset = Property.objects.all()
-    serializer_class = PropertySerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['name', 'assurance_goal']
-    search_fields = ['name', 'assurance_goal__name']
-    ordering_fields = ['id', 'name']
-
-class TechniquePropertiesViewSet(viewsets.ModelViewSet):
-    queryset = TechniqueProperty.objects.all()
-    serializer_class = TechniquePropertySerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['technique', 'property', 'value']
-    search_fields = ['technique__name', 'property__name', 'value']
-    ordering_fields = ['technique', 'property']
-
-class TechniqueTagsViewSet(viewsets.ModelViewSet):
-    queryset = TechniqueTag.objects.all()
-    serializer_class = TechniqueTagSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['technique', 'tag']
-    search_fields = ['technique__name', 'tag__name']
-    ordering_fields = ['technique', 'tag']

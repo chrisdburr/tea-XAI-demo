@@ -1,4 +1,4 @@
-<!-- api/templates/technique_add.html -->
+<!-- api/templates/api/technique_add.html -->
 
 {% extends 'base.html' %}
 {% load static tailwind_tags form_tags %}
@@ -37,25 +37,35 @@
                 {% endif %}
             </div>
 
-            <!-- Categories -->
+            <!-- Category -->
             <div class="mb-4">
-                <label for="id_categories" class="block text-gray-700 font-semibold mb-2">Categories</label>
-                <select name="categories" id="id_categories" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="id_category" class="block text-gray-700 font-semibold mb-2">Category</label>
+                <select name="category" id="id_category" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Select Category</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id|stringformat:"d" == selected_category %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
                 </select>
-                {% if form.categories.errors %}
-                    <p class="text-red-500 text-sm mt-1">{{ form.categories.errors }}</p>
+                {% if form.category.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.category.errors }}</p>
                 {% endif %}
             </div>
 
-            <!-- Sub-Categories -->
+            <!-- Sub-Category -->
             <div class="mb-4">
-                <label for="id_sub_categories" class="block text-gray-700 font-semibold mb-2">Sub-Categories</label>
-                <select name="sub_categories" id="id_sub_categories" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="id_sub_category" class="block text-gray-700 font-semibold mb-2">Sub-Category</label>
+                <select name="sub_category" id="id_sub_category" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Select Sub-Category</option>
+                    {% for sub_category in sub_categories %}
+                        <option value="{{ sub_category.id }}" {% if sub_category.id|stringformat:"d" == selected_sub_category %}selected{% endif %}>
+                            {{ sub_category.name }}
+                        </option>
+                    {% endfor %}
                 </select>
-                {% if form.sub_categories.errors %}
-                    <p class="text-red-500 text-sm mt-1">{{ form.sub_categories.errors }}</p>
+                {% if form.sub_category.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.sub_category.errors }}</p>
                 {% endif %}
             </div>
 
@@ -64,14 +74,17 @@
                 <label class="block text-gray-700 font-semibold mb-2">Model Dependency</label>
                 <div class="flex space-x-4">
                     <label class="inline-flex items-center">
-                        <input type="radio" name="model_dependency" value="agnostic" class="form-radio text-blue-500" checked>
+                        <input type="radio" name="model_dependency" value="Model-Agnostic" class="form-radio text-blue-500" {% if form.model_dependency.value == "Model-Agnostic" %}checked{% endif %}>
                         <span class="ml-2">Agnostic</span>
                     </label>
                     <label class="inline-flex items-center">
-                        <input type="radio" name="model_dependency" value="specific" class="form-radio text-blue-500">
+                        <input type="radio" name="model_dependency" value="Model-Specific" class="form-radio text-blue-500" {% if form.model_dependency.value == "Model-Specific" %}checked{% endif %}>
                         <span class="ml-2">Specific</span>
                     </label>
                 </div>
+                {% if form.model_dependency.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.model_dependency.errors }}</p>
+                {% endif %}
             </div>
 
             <!-- Example Use-Case -->
@@ -98,14 +111,15 @@
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">Scope</label>
                     <label class="inline-flex items-center">
-                        <input type="checkbox" name="scope" value="local" class="form-checkbox text-blue-500">
-                        <span class="ml-2">Local</span>
-                    </label>
-                    <label class="inline-flex items-center ml-4">
-                        <input type="checkbox" name="scope" value="global" class="form-checkbox text-blue-500">
+                        <input type="checkbox" name="scope" value="Global" class="form-checkbox text-blue-500" {% if 'Global' in form.scope.value %}checked{% endif %}>
                         <span class="ml-2">Global</span>
                     </label>
+                    <label class="inline-flex items-center ml-4">
+                        <input type="checkbox" name="scope" value="Local" class="form-checkbox text-blue-500" {% if 'Local' in form.scope.value %}checked{% endif %}>
+                        <span class="ml-2">Local</span>
+                    </label>
                 </div>
+
                 <!-- Fairness Approach -->
                 <div class="mb-4">
                     <label for="id_fairness_approach" class="block text-gray-700 font-semibold mb-2">Fairness Approach</label>
@@ -115,7 +129,11 @@
                             <option value="{{ approach.id }}">{{ approach.name }}</option>
                         {% endfor %}
                     </select>
+                    {% if form.fairness_approach.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.fairness_approach.errors }}</p>
+                    {% endif %}
                 </div>
+
                 <!-- Project Lifecycle Stage -->
                 <div class="mb-4">
                     <label for="id_project_lifecycle_stage" class="block text-gray-700 font-semibold mb-2">Project Lifecycle Stage</label>
@@ -125,6 +143,9 @@
                             <option value="{{ stage.id }}">{{ stage.name }}</option>
                         {% endfor %}
                     </select>
+                    {% if form.project_lifecycle_stage.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.project_lifecycle_stage.errors }}</p>
+                    {% endif %}
                 </div>
             </div>
 
@@ -139,19 +160,32 @@
 
     <script>
         const assuranceGoalField = document.getElementById('id_assurance_goal');
-        const categoryField = document.getElementById('id_categories');
-        const subCategoryField = document.getElementById('id_sub_categories');
+        const categoryField = document.getElementById('id_category');
+        const subCategoryField = document.getElementById('id_sub_category');
         const dynamicFields = document.getElementById('dynamic-fields');
 
         assuranceGoalField.addEventListener('change', function() {
             const selectedGoal = this.value;
 
+            if (!selectedGoal) {
+                categoryField.innerHTML = '<option value="">Select Category</option>';
+                subCategoryField.innerHTML = '<option value="">Select Sub-Category</option>';
+                dynamicFields.classList.add('hidden');
+                return;
+            }
+
             // Fetch categories based on selected assurance goal
-            fetch(`/api/get_categories/${selectedGoal}/`)
-                .then(response => response.json())
+            fetch(`/get_categories/${selectedGoal}/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     // Clear current options
                     categoryField.innerHTML = '<option value="">Select Category</option>'; // Reset
+                    subCategoryField.innerHTML = '<option value="">Select Sub-Category</option>'; // Reset
                     data.categories.forEach(category => {
                         const option = document.createElement('option');
                         option.value = category.id;
@@ -160,23 +194,34 @@
                     });
 
                     // Show/hide dynamic fields based on selected goal
-                    if (selectedGoal === 'explainability' || selectedGoal === 'fairness') {
+                    if (selectedGoal === 'Explainability' || selectedGoal === 'Fairness') {
                         dynamicFields.classList.remove('hidden');
                     } else {
                         dynamicFields.classList.add('hidden');
                     }
+                })
+                .catch(error => {
+                    console.error('Error fetching categories:', error);
+                    alert('Failed to load categories. Please try again.');
                 });
-
-            // Clear sub-category options
-            subCategoryField.innerHTML = '<option value="">Select Sub-Category</option>'; // Reset
         });
 
         categoryField.addEventListener('change', function() {
             const selectedCategory = this.value;
 
+            if (!selectedCategory) {
+                subCategoryField.innerHTML = '<option value="">Select Sub-Category</option>';
+                return;
+            }
+
             // Fetch sub-categories based on selected category
-            fetch(`/api/get_subcategories/${selectedCategory}/`)
-                .then(response => response.json())
+            fetch(`/get_subcategories/${selectedCategory}/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     // Clear current options
                     subCategoryField.innerHTML = '<option value="">Select Sub-Category</option>'; // Reset
@@ -186,7 +231,41 @@
                         option.textContent = subCategory.name;
                         subCategoryField.appendChild(option);
                     });
+                })
+                .catch(error => {
+                    console.error('Error fetching sub-categories:', error);
+                    alert('Failed to load sub-categories. Please try again.');
                 });
+        });
+
+        // Initialize dynamic fields based on pre-selected values (if any)
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectedAssuranceGoal = "{{ selected_assurance_goal }}";
+            const selectedCategory = "{{ selected_category }}";
+            const selectedSubCategory = "{{ selected_sub_category }}";
+
+            // If there's a pre-selected assurance goal, trigger the change event
+            if (selectedAssuranceGoal) {
+                assuranceGoalField.value = selectedAssuranceGoal;
+                assuranceGoalField.dispatchEvent(new Event('change'));
+            }
+
+            // If there's a pre-selected category, trigger the change event after categories are loaded
+            if (selectedCategory) {
+                // Delay to allow categories to load via AJAX
+                setTimeout(() => {
+                    categoryField.value = selectedCategory;
+                    categoryField.dispatchEvent(new Event('change'));
+                }, 500); // Adjust timeout as needed
+            }
+
+            // If there's a pre-selected sub-category, set it after sub-categories are loaded
+            if (selectedSubCategory) {
+                // Delay to allow sub-categories to load via AJAX
+                setTimeout(() => {
+                    subCategoryField.value = selectedSubCategory;
+                }, 1000); // Adjust timeout as needed
+            }
         });
     </script>
 {% endblock %}

@@ -43,17 +43,10 @@ poetry shell
 
 Once the virtual environment, packages, and container are created/running, you can populate the database.
 
-> [!WARNING]  
-> The order of the following commands is important and should all be run from the root directory.
-
 ```shell
 python manage.py makemigrations
 python manage.py migrate
-python manage.py loaddata api/fixtures/assurance_goals.json
-python manage.py loaddata api/fixtures/categories.json
-python manage.py loaddata api/fixtures/sub-categories.json
-python import_techniques api/management/commands/explainability_techniques.csv "Explainability"
-python import_techniques api/management/commands/fairness_techniques.csv "Fairness"
+python run load_and_import.py
 ```
 
 ### Run Django App

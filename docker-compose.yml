@@ -9,7 +9,7 @@ services:
     volumes:
       - tea-xai-db:/var/lib/postgresql/data
     ports:
-      - "5434:5432"
+      - "5432:5432"
 
 volumes:
   tea-xai-db:

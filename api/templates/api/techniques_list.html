@@ -70,23 +70,19 @@
                         {% endif %}
                     </td>
 
-                    <!-- Categories -->
+                    <!-- Category -->
                     <td class="py-4 px-6">
-                        {% if technique.categories.all %}
-                            {% for category in technique.categories.all %}
-                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-2 rounded-full mr-1 mb-1">{{ category.name }}</span>
-                            {% endfor %}
+                        {% if technique.category %}
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-2 rounded-full mr-1 mb-1">{{ technique.category.name }}</span>
                         {% else %}
                             <span class="text-gray-500 text-sm">N/A</span>
                         {% endif %}
                     </td>
 
-                    <!-- Sub-Categories -->
+                    <!-- Sub-Category -->
                     <td class="py-4 px-6">
-                        {% if technique.sub_categories.all %}
-                            {% for sub_cat in technique.sub_categories.all %}
-                                <span class="inline-block bg-green-100 text-green-800 text-xs px-3 py-2 rounded-full mr-1 mb-1">{{ sub_cat.name }}</span>
-                            {% endfor %}
+                        {% if technique.sub_category %}
+                            <span class="inline-block bg-green-100 text-green-800 text-xs px-3 py-2 rounded-full mr-1 mb-1">{{ technique.sub_category.name }}</span>
                         {% else %}
                             <span class="text-gray-500 text-sm">N/A</span>
                         {% endif %}
@@ -128,7 +124,7 @@
     <div class="flex justify-center mt-6">
         <nav class="flex items-center space-x-2">
             {% if techniques.has_previous %}
-                <a href="?page={{ techniques.previous_page_number }}" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Previous</a>
+                <a href="?{{ querystring }}{% if querystring %}&{% endif %}page={{ techniques.previous_page_number }}" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Previous</a>
             {% else %}
                 <span class="px-3 py-2 bg-gray-100 text-gray-400 rounded">Previous</span>
             {% endif %}
@@ -137,12 +133,12 @@
                 {% if techniques.number == num %}
                     <span class="px-3 py-2 bg-blue-500 text-white rounded">{{ num }}</span>
                 {% else %}
-                    <a href="?page={{ num }}" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">{{ num }}</a>
+                    <a href="?{{ querystring }}{% if querystring %}&{% endif %}page={{ num }}" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">{{ num }}</a>
                 {% endif %}
             {% endfor %}
 
             {% if techniques.has_next %}
-                <a href="?page={{ techniques.next_page_number }}" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</a>
+                <a href="?{{ querystring }}{% if querystring %}&{% endif %}page={{ techniques.next_page_number }}" class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</a>
             {% else %}
                 <span class="px-3 py-2 bg-gray-100 text-gray-400 rounded">Next</span>
             {% endif %}
