@@ -25,12 +25,21 @@ def techniques_list(request):
     page_number = request.GET.get('page')
     techniques = paginator.get_page(page_number)
 
+    # Get a copy of the GET parameters
+    get_params = request.GET.copy()
+    # Remove 'page' parameter to avoid duplication
+    if 'page' in get_params:
+        del get_params['page']
+    # Encode the parameters into a query string
+    querystring = get_params.urlencode()
+
     return render(request, 'api/techniques_list.html', {
         'techniques': techniques,
-        'categories': Category.objects.all(),  # Pass all categories to the template
-        'assurance_goals': AssuranceGoal.objects.all(),  # Pass all assurance goals to the template
+        'categories': Category.objects.all(),
+        'assurance_goals': AssuranceGoal.objects.all(),
         'selected_category': category_filter,
-        'selected_assurance_goal': assurance_goal_filter  # Pass the selected assurance goal
+        'selected_assurance_goal': assurance_goal_filter,
+        'querystring': querystring  # Pass the query string to the template
     })
 
 def technique_add(request):
